@@ -6,7 +6,7 @@ import (
 	"github.com/matryer/is"
 )
 
-func TestNodeBuilder(t *testing.T) {
+func TestGraph(t *testing.T) {
 	is := is.New(t)
 
 	n := New()
@@ -31,4 +31,6 @@ func TestNodeBuilder(t *testing.T) {
 
 	edges := n.Edges()
 	is.Equal(len(edges), 3)
+
+	list := n.Nodes()
 }
