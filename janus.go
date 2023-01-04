@@ -1,7 +1,5 @@
 package main
 
-import "log"
-
 // # DOMAIN MODELING
 //
 // ## Entity models
@@ -107,11 +105,8 @@ func (n *NodeBuilder) AddEdge(start int64, end int64, weight int64) {
 func (n *NodeBuilder) Neighbors(id int64) []int64 {
 	neighbors := []int64{}
 	for _, node := range n.nodes {
-		// for each node in our list of nodes
-		log.Printf("node: %+v", node)
-		// for each edge in the node's list
-		for edge, weight := range node.edges {
-			log.Printf("edge: %+v - weight: %+v", edge, weight)
+		// for each edge in the node's list, record its weight.
+		for edge := range node.edges {
 			if node.id == id {
 				neighbors = append(neighbors, edge)
 			}
@@ -129,10 +124,20 @@ func (n *NodeBuilder) Nodes() []int64 {
 	panic("not impl")
 }
 
-// Edges returns the NodeWeight
+// Edges returns the list of edges in the graph.
 func (n *NodeBuilder) Edges() []Edge {
-	// TODO: return a slice of edges that are triplets of start node, end node, and edge weight.
-	panic("not impl")
+	// create a slice of edges as large as the list of nodes we have
+	edges := make([]Edge, 0, int64(len(n.nodes)))
+	// iterate over all nodes and collect their edges
+	for nodeID := range n.nodes {
+		for peer, weight := range n.nodes[nodeID].edges {
+			// loops over the edges in each node in the ID list and
+			// creates an Edge entry for each.
+			edges = append(edges, Edge{int64(nodeID), peer, weight})
+		}
+	}
+
+	return edges
 }
 
 // And finally, let's define what our external interface should be.
