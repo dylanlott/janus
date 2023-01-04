@@ -36,13 +36,25 @@ func TestGraph(t *testing.T) {
 	is.Equal(len(list), 3)
 }
 
-// func TestIteration(t *testing.T) {
-// is := is.New(t)
-//
-// g := testGraph(t)
-//
-// iter := g.Iter()
-// }
+func TestIterator(t *testing.T) {
+	is := is.New(t)
+	g := testGraph(t)
+	i := NewIterator(g)
+
+	is.True(i.HasNext())
+
+	first := i.Next()
+	is.Equal(first.id, int64(0))
+
+	is.True(i.HasNext())
+	_ = i.Next()
+	is.True(i.HasNext())
+	_ = i.Next()
+	is.True(i.HasNext())
+	_ = i.Next()
+
+	is.Equal(i.HasNext(), false)
+}
 
 func testGraph(t *testing.T) *Graph {
 	n := New()

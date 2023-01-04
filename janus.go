@@ -85,7 +85,15 @@ func (n *Graph) Edges() []Edge {
 
 // Filter is a function type that takes an index and a node and
 // returns true if the node passes the predicate function.
-type Filter func(idx int64, node *GraphNode) bool
+type Filter func(node *GraphNode) bool
+
+// NewIterator returns a new iterator loaded with the provided graph.
+func NewIterator(graph *Graph) Iterator {
+	return &iter{
+		nodes: graph.nodes,
+		curr:  0,
+	}
+}
 
 // Iterator returns an interface for fulfilling an iterator adapter pattern.
 type Iterator interface {
@@ -93,8 +101,51 @@ type Iterator interface {
 	HasNext() bool
 }
 
+// iter fulfills Iterable
+type iter struct {
+	nodes []*GraphNode
+	curr  int64
+}
+
+// Next advances the iterator and returns the node at that position
+func (i *iter) Next() *GraphNode {
+	node := i.nodes[i.curr]
+	i.curr++
+	return node
+}
+
+// HasNext returns true if the iterator has values left to read
+func (i *iter) HasNext() bool {
+	if i.curr < int64(len(i.nodes)) {
+		return true
+	}
+	return false
+}
+
 // Search applies a set of predicates to each node in a traversal function.
 // It returns the list of visited nodes that matched all Predicates.
 func (n *Graph) Search(i Iterator, filters []Filter) []*GraphNode {
-	panic("not impl")
+	filtered := []*GraphNode{}
+
+	for i.HasNext() {
+		node := i.Next()
+		var passed bool
+
+		// apply all filter funcs. early return if any fails
+		// and don't add to filtered
+		for _, filterFn := range filters {
+			if ok := filterFn(node); !ok {
+				passed = false
+				break
+			}
+		}
+
+		// if passed is still true, we passed all filter functions
+		// so the node should be added.
+		if passed {
+			filtered = append(filtered, node)
+		}
+	}
+
+	return filtered
 }
