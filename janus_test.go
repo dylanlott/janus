@@ -10,6 +10,7 @@ func TestNodeBuilder(t *testing.T) {
 	is := is.New(t)
 
 	n := New()
+
 	firstNode := n.AddNode()
 	secondNode := n.AddNode()
 	thirdNode := n.AddNode()
@@ -25,4 +26,6 @@ func TestNodeBuilder(t *testing.T) {
 
 	neighbors := n.Neighbors(firstNode)
 	is.Equal(len(neighbors), 2)
+	is.Equal(neighbors[0], int64(1))
+	is.Equal(neighbors[1], int64(2))
 }

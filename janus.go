@@ -17,13 +17,13 @@ type Location struct{}
 // * Tickets have an origin and destination Airport.
 type Airport struct{}
 
-// Hubs are meant for ground transportation.
+// Hub represents ground transportation hubs
 type Hub struct{}
 
-// Tickets only have one Person, but a Person can have many tickets.
+// Ticket has one Person and one Edge, representing the Trip.
 type Ticket struct{}
 
-// Planes have a location, which can be many things, including an airport or a GPS location.
+// Plane has a location, which can be many things, including an airport or a GPS location.
 type Plane struct{}
 
 // Person can have many tickets.
@@ -66,6 +66,7 @@ type Builder interface {
 // Let's try a second version of this same core resource.
 // We should always try multiple designs!
 // Let's consider more abstract names and functions, decoupling from our Location terminology.
+
 // NodeBuilder is our new concrete implementation.
 type NodeBuilder struct {
 	nodes []*GraphNode
@@ -80,12 +81,14 @@ type GraphNode struct {
 	edges map[int64]int64 // a connection to another node and the connection's weight
 }
 
+// New returns a new NodeBuilder
 func New() *NodeBuilder {
 	return &NodeBuilder{
 		nodes: []*GraphNode{},
 	}
 }
 
+// AddNode adds a node to the end of the list with an empty set of edges.
 func (n *NodeBuilder) AddNode() int64 {
 	id := len(n.nodes)
 	n.nodes = append(n.nodes, &GraphNode{
@@ -152,6 +155,7 @@ type BookingAgent interface {
 // We're an air transit company, people is one option, but cargo is the business to be in.
 // So we have a shipping agent too, who works on the same underlying data structure, but looks for different things.
 
+// ShippingTicket represents a shipping ticket in the shipping agent's system.
 type ShippingTicket struct{}
 
 // ShippingAgent defines a second system interacting with our same core resource - the graph of nodes.
