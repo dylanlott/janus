@@ -100,41 +100,6 @@ func (n *Graph) Remove(id int64) {
 // if the node passes the predicate constraints.
 type Predicate func(node *GraphNode) bool
 
-// NewIterator returns an iterator loaded with the provided graph nodes for traversal.
-func NewIterator(graph *Graph) Iterator {
-	return &iter{
-		nodes: graph.nodes,
-		curr:  0,
-	}
-}
-
-// Iterator returns an interface for fulfilling an iterator adapter pattern.
-type Iterator interface {
-	Next() *GraphNode
-	HasNext() bool
-}
-
-// iter fulfills Iterable
-type iter struct {
-	nodes []*GraphNode
-	curr  int64
-}
-
-// Next advances the iterator and returns the node at that position
-func (i *iter) Next() *GraphNode {
-	node := i.nodes[i.curr]
-	i.curr++
-	return node
-}
-
-// HasNext returns true if the iterator has values left to read
-func (i *iter) HasNext() bool {
-	if i.curr < int64(len(i.nodes)) {
-		return true
-	}
-	return false
-}
-
 // Filter applies a predicate to each node in the Iterator.
 // It returns the slice of nodes that passed the predicate.
 func Filter(i Iterator, pred Predicate) []*GraphNode {
