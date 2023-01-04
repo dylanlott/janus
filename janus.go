@@ -1,9 +1,9 @@
 package main
 
-// Node is an abstract interface for implementing a graph data structure.
-type Node interface{}
-
-var _ Node = (*GraphNode)(nil)
+// Janus is a graph data structure implementation in Go.
+// It builds out a list of nodes in their order of creation and records
+// relationship between two nodes as an edge in the graph.
+// Edges are a triplet of a start, an end, and a weight to the relationship.
 
 // Graph is our new concrete implementation.
 type Graph struct {

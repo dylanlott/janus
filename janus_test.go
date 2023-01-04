@@ -33,4 +33,5 @@ func TestGraph(t *testing.T) {
 	is.Equal(len(edges), 3)
 
 	list := n.Nodes()
+	is.Equal(len(list), 3)
 }
