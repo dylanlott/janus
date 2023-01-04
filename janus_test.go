@@ -35,3 +35,27 @@ func TestGraph(t *testing.T) {
 	list := n.Nodes()
 	is.Equal(len(list), 3)
 }
+
+// func TestIteration(t *testing.T) {
+// is := is.New(t)
+//
+// g := testGraph(t)
+//
+// iter := g.Iter()
+// }
+
+func testGraph(t *testing.T) *Graph {
+	n := New()
+
+	firstNode := n.AddNode()  // 0
+	secondNode := n.AddNode() // 1
+	thirdNode := n.AddNode()  // 2
+	fourthNode := n.AddNode() // 3
+
+	n.AddEdge(firstNode, secondNode, 100) // 0 => 1
+	n.AddEdge(secondNode, thirdNode, 100) // 1 => 2
+	n.AddEdge(thirdNode, firstNode, 50)   // 2 => 0
+	n.AddEdge(fourthNode, thirdNode, 100) // 3 => 2
+
+	return n
+}

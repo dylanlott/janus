@@ -3,7 +3,7 @@ package main
 // Janus is a graph data structure implementation in Go.
 // It builds out a list of nodes in their order of creation and records
 // relationship between two nodes as an edge in the graph.
-// Edges are a triplet of a start, an end, and a weight to the relationship.
+// Edges are represented as triplet of a start, an end, and a weight to the relationship.
 
 // Graph is our new concrete implementation.
 type Graph struct {
@@ -81,4 +81,20 @@ func (n *Graph) Edges() []Edge {
 	}
 
 	return edges
+}
+
+// Filter is a function type that takes an index and a node and
+// returns true if the node passes the predicate function.
+type Filter func(idx int64, node *GraphNode) bool
+
+// Iterator returns an interface for fulfilling an iterator adapter pattern.
+type Iterator interface {
+	Next() *GraphNode
+	HasNext() bool
+}
+
+// Search applies a set of predicates to each node in a traversal function.
+// It returns the list of visited nodes that matched all Predicates.
+func (n *Graph) Search(i Iterator, filters []Filter) []*GraphNode {
+	panic("not impl")
 }
