@@ -83,6 +83,19 @@ func (n *Graph) Edges() []Edge {
 	return edges
 }
 
+func (n *Graph) Remove(id int64) {
+	for idx, node := range n.nodes {
+		if node.id == id {
+			// slice out of the nodes index
+			n.nodes = append(n.nodes[:idx], n.nodes[idx+1:]...)
+		}
+		if _, ok := node.edges[id]; ok {
+			// remove any edges that were connected to that node
+			delete(node.edges, id)
+		}
+	}
+}
+
 // Predicate is a function type that takes a node and returns true
 // if the node passes the predicate constraints.
 type Predicate func(node *GraphNode) bool

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 
 	"github.com/matryer/is"
@@ -65,7 +64,6 @@ func TestFilter(t *testing.T) {
 	targetNode := g.nodes[0]
 	var edgeFn Predicate = func(n *GraphNode) bool {
 		if _, ok := n.edges[targetNode.id]; ok {
-			log.Printf("edge found: %+v", n.edges[targetNode.id])
 			return true
 		}
 		return false
@@ -75,6 +73,22 @@ func TestFilter(t *testing.T) {
 
 	is.Equal(len(got), 1)
 	is.Equal(got[0].id, int64(2))
+}
+
+func TestRemove(t *testing.T) {
+	is := is.New(t)
+	g := testGraph(t)
+
+	target := g.nodes[0].id
+	g.Remove(target)
+
+	is.Equal(len(g.nodes), 3)
+
+	for _, node := range g.nodes {
+		if _, ok := node.edges[target]; ok {
+			t.Errorf("edges should not contain target id %+v", target)
+		}
+	}
 }
 
 func testGraph(t *testing.T) *Graph {
