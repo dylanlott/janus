@@ -83,11 +83,11 @@ func (n *Graph) Edges() []Edge {
 	return edges
 }
 
-// Filter is a function type that takes an index and a node and
-// returns true if the node passes the predicate function.
-type Filter func(node *GraphNode) bool
+// Predicate is a function type that takes a node and returns true
+// if the node passes the predicate constraints.
+type Predicate func(node *GraphNode) bool
 
-// NewIterator returns a new iterator loaded with the provided graph.
+// NewIterator returns an iterator loaded with the provided graph nodes for traversal.
 func NewIterator(graph *Graph) Iterator {
 	return &iter{
 		nodes: graph.nodes,
@@ -122,28 +122,18 @@ func (i *iter) HasNext() bool {
 	return false
 }
 
-// Search applies a set of predicates to each node in a traversal function.
+// Filter applies a set of predicates to each node in a traversal function.
 // It returns the list of visited nodes that matched all Predicates.
-func (n *Graph) Search(i Iterator, filters []Filter) []*GraphNode {
+func Filter(i Iterator, filters []Predicate) []*GraphNode {
 	filtered := []*GraphNode{}
 
 	for i.HasNext() {
 		node := i.Next()
-		var passed bool
 
-		// apply all filter funcs. early return if any fails
-		// and don't add to filtered
-		for _, filterFn := range filters {
-			if ok := filterFn(node); !ok {
-				passed = false
-				break
+		for _, fn := range filters {
+			if ok := fn(node); ok {
+				filtered = append(filtered, node)
 			}
-		}
-
-		// if passed is still true, we passed all filter functions
-		// so the node should be added.
-		if passed {
-			filtered = append(filtered, node)
 		}
 	}
 
