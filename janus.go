@@ -122,18 +122,17 @@ func (i *iter) HasNext() bool {
 	return false
 }
 
-// Filter applies a set of predicates to each node in a traversal function.
-// It returns the list of visited nodes that matched all Predicates.
-func Filter(i Iterator, filters []Predicate) []*GraphNode {
+// Filter applies a predicate to each node in the Iterator.
+// It returns the slice of nodes that passed the predicate.
+func Filter(i Iterator, pred Predicate) []*GraphNode {
 	filtered := []*GraphNode{}
 
+	// test predicate against every node in the iterator
 	for i.HasNext() {
 		node := i.Next()
-
-		for _, fn := range filters {
-			if ok := fn(node); ok {
-				filtered = append(filtered, node)
-			}
+		if ok := pred(node); ok {
+			// append to filtered if it passes
+			filtered = append(filtered, node)
 		}
 	}
 

@@ -71,7 +71,7 @@ func TestFilter(t *testing.T) {
 		return false
 	}
 
-	got := Filter(i, []Predicate{edgeFn})
+	got := Filter(i, edgeFn)
 
 	is.Equal(len(got), 1)
 	is.Equal(got[0].id, int64(2))
