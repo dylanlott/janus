@@ -7,31 +7,26 @@ package main
 
 // Graph is our new concrete implementation.
 type Graph struct {
-	nodes []*GraphNode
+	nodes []*GraphNode[any]
 }
 
 // Edge is a triplet of start node, end node, and the edge weight.
 type Edge [3]int64
 
-// GraphNode is a node in our NodeBuilder
-type GraphNode struct {
-	id    int64
-	edges map[int64]int64 // a connection to another node and the connection's weight
-}
-
 // New returns a new Graph.
 func New() *Graph {
 	return &Graph{
-		nodes: []*GraphNode{},
+		nodes: []*GraphNode[any]{},
 	}
 }
 
 // AddNode adds a node to the end of the list with an empty set of edges.
 func (n *Graph) AddNode() int64 {
 	id := len(n.nodes)
-	n.nodes = append(n.nodes, &GraphNode{
+	n.nodes = append(n.nodes, &GraphNode[any]{
 		id:    int64(id),
 		edges: map[int64]int64{},
+		val:   nil,
 	})
 	return int64(id)
 }
@@ -83,6 +78,7 @@ func (n *Graph) Edges() []Edge {
 	return edges
 }
 
+// Remove deletes a node and all of its edges.
 func (n *Graph) Remove(id int64) {
 	for idx, node := range n.nodes {
 		if node.id == id {
@@ -98,12 +94,12 @@ func (n *Graph) Remove(id int64) {
 
 // Predicate is a function type that takes a node and returns true
 // if the node passes the predicate constraints.
-type Predicate func(node *GraphNode) bool
+type Predicate func(node *GraphNode[any]) bool
 
 // Filter applies a predicate to each node in the Iterator.
 // It returns the slice of nodes that passed the predicate.
-func Filter(i Iterator, pred Predicate) []*GraphNode {
-	filtered := []*GraphNode{}
+func Filter(i Iterator, pred Predicate) []*GraphNode[any] {
+	filtered := []*GraphNode[any]{}
 
 	// test predicate against every node in the iterator
 	for i.HasNext() {

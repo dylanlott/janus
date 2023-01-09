@@ -10,18 +10,18 @@ func NewIterator(graph *Graph) Iterator {
 
 // Iterator returns an interface for fulfilling an iterator adapter pattern.
 type Iterator interface {
-	Next() *GraphNode
+	Next() *GraphNode[any]
 	HasNext() bool
 }
 
 // iter fulfills Iterable
 type iter struct {
-	nodes []*GraphNode
+	nodes []*GraphNode[any]
 	curr  int64
 }
 
 // Next advances the iterator and returns the node at that position
-func (i *iter) Next() *GraphNode {
+func (i *iter) Next() *GraphNode[any] {
 	node := i.nodes[i.curr]
 	i.curr++
 	return node

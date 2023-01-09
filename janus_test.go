@@ -62,7 +62,7 @@ func TestFilter(t *testing.T) {
 	i := NewIterator(g)
 
 	targetNode := g.nodes[0]
-	var edgeFn Predicate = func(n *GraphNode) bool {
+	var edgeFn Predicate = func(n *GraphNode[any]) bool {
 		if _, ok := n.edges[targetNode.id]; ok {
 			return true
 		}
